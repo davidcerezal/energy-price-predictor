@@ -88,7 +88,7 @@ class ESIOS(object):
         Get the current target available data and returns in dataframe format
         :return:
         """
-        data_consumo_temp = self.data['PVPC_DEF'].copy()
+        data_consumo_temp = self.data[['PVPC_DEF']].copy()
         
         return data_consumo_temp 
             
