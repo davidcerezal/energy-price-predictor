@@ -23,6 +23,7 @@ import pandas as pd
 import numpy as np
 import datetime
 import pickle
+from sklearn.utils import check_array
 
 
 class ESIOS(object):
@@ -47,7 +48,7 @@ class ESIOS(object):
             name = 'data_total.csv'
             
         if self.in_colab:
-            data_consumo = pd.read_csv("/content/drive/My Drive/TFM/Utils/data/"+name)
+            data_consumo = pd.read_csv("/content/drive/My Drive/TFM/01.Utils/data/"+name)
         else:
             data_consumo = pd.read_csv("../utils/data/"+name)
             
@@ -69,13 +70,8 @@ class ESIOS(object):
         Get the current real time available data and returns in dataframe format
         :return:
         """
-        data_consumo_temp = self.data.drop(columns=['PVPC_DEF',
-            'PVPC_2_PED_NOC',
-            'PVPC_ELEC_NOC',
-            'Precio mercado SPOT Diario_x',
-            'Precio SPOT PT',
-            'Precio SPOT FR',
-            'Demanda real',
+        data_consumo_temp = self.data.drop(columns=[
+            'PVPC-target',
             'fecha',
             'date_day',
             'date_timestamp'                                  
@@ -88,11 +84,15 @@ class ESIOS(object):
         Get the current target available data and returns in dataframe format
         :return:
         """
-        data_consumo_temp = self.data[['PVPC_DEF']].copy()
+        data_consumo_temp = self.data[['PVPC-target']].copy()
         
         return data_consumo_temp 
             
 
+    def mean_absolute_percentage_error(self, y_pred, y_true ): 
+        y_true, y_pred = check_array(y_true, y_pred)
+        
+        return np.mean(np.abs((y_true - y_pred) / y_true)) * 100
         
 
 
